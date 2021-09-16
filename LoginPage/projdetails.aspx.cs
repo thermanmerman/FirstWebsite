@@ -18,7 +18,7 @@ namespace LoginPage
         {
             using (con)
             {
-                using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM customers WHERE project_id=" + Request.QueryString["id"].ToString(), con))
+                using (MySqlCommand cmd = new MySqlCommand("SELECT * FROM customers WHERE contact_id=" + Request.QueryString["contact_id"].ToString(), con))
                 {
                     using (MySqlDataAdapter sda = new MySqlDataAdapter())
                     {
@@ -38,7 +38,7 @@ namespace LoginPage
         {
             DataTable dt = new DataTable();
             con.Open();
-            MySqlDataAdapter adapt = new MySqlDataAdapter("Select * from customers", con);
+            MySqlDataAdapter adapt = new MySqlDataAdapter("SELECT * FROM customers WHERE contact_id=" + Request.QueryString["contact_id"].ToString(), con);
             adapt.Fill(dt);
             if (dt.Rows.Count > 0)
             {

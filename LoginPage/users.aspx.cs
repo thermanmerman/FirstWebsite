@@ -12,12 +12,12 @@ namespace LoginPage
     public partial class users : System.Web.UI.Page
     {
         MySqlConnection con = new MySqlConnection("datasource=localhost;port=3306;username=maxmckelvey;password=G@torade123;Connection Timeout=3000;database=acuity");
-        private DataTable GetData()
+
+        private DataTable GetCustomersData()
         {
-            //string constr = "datasource=localhost;port=3306;username=maxmckelvey;password=G@torade123;Connection Timeout=3000;database=acuity";
             using (con)
             {
-                using (MySqlCommand cmd = new MySqlCommand("SELECT customers.first_name, customers.last_name, customers.account_name, customers.email, customers.title, customers.department, customers.phone, customers.address, customers.project_id FROM customers INNER JOIN project_relation ON customers.project_id=project_relation.project_id WHERE customers.project_id=" + Request.QueryString["id"].ToString(), con))
+                using (MySqlCommand cmd = new MySqlCommand("SELECT customers.contact_id, customers.first_name, customers.last_name, customers.account_name, customers.email, customers.title, customers.department, customers.phone, customers.address, customers.project_id FROM customers INNER JOIN project_relation ON customers.project_id=project_relation.project_id WHERE customers.project_id=" + Request.QueryString["id"].ToString(), con))
                 {
                     using (MySqlDataAdapter sda = new MySqlDataAdapter())
                     {
@@ -33,18 +33,24 @@ namespace LoginPage
             }
         }
 
-        protected void ShowData()
+        private DataTable GetNotes()
         {
-            DataTable dt = new DataTable();
-            con.Open();
-            MySqlDataAdapter adapt = new MySqlDataAdapter("SELECT customers.first_name, customers.last_name, customers.account_name, customers.email, customers.title, customers.department, customers.phone, customers.address, customers.project_id, FROM customers INNER JOIN project_relation ON customers.project_id=project_relation.project_id WHERE customers.project_id=" + Request.QueryString["id"].ToString(), con);
-            adapt.Fill(dt);
-            if (dt.Rows.Count > 0)
+            using (con)
             {
-                grCustomers.DataSource = dt;
-                grCustomers.DataBind();
+                using (MySqlCommand cmd = new MySqlCommand("SELECT proj_notes.project_id, proj_notes.note, projects.id, projects.name, projects.description FROM proj_notes INNER JOIN projects ON proj_notes.project_id=projects.id WHERE projects.id=" + Request.QueryString["id"].ToString(), con))
+                {
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataTable dt = new DataTable("notes"))
+                        {
+                            sda.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
             }
-            con.Close();
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -52,9 +58,13 @@ namespace LoginPage
             if (!Page.IsPostBack)
             {
                 con.Open();
-                DataTable ds = GetData();
+                DataTable ds = GetCustomersData();
                 grCustomers.DataSource = ds;
                 grCustomers.DataBind();
+
+                DataTable dt = GetNotes();
+                projList.DataSource = dt;
+                projList.DataBind();
                 
                 con.Close();
             }
@@ -66,7 +76,7 @@ namespace LoginPage
         {
             grCustomers.PageIndex = e.NewPageIndex;
             con.Open();
-            DataTable ds = GetData();
+            DataTable ds = GetCustomersData();
             grCustomers.DataSource = ds;
             grCustomers.DataBind();
             con.Close();
@@ -74,14 +84,19 @@ namespace LoginPage
 
         protected void grCustomers_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            string row = grCustomers.Rows[e.RowIndex].Cells[3].Text;
+            string row = grCustomers.Rows[e.RowIndex].Cells[4].Text;
 
             con.Open();
-            MySqlCommand delquery = new MySqlCommand("DELETE FROM customers WHERE last_name=" + row, con);
+            MySqlCommand delquery = new MySqlCommand("DELETE FROM customers WHERE last_name='" + row + "'", con);
             delquery.ExecuteNonQuery();
             con.Close();
 
-            ShowData();
+            con.Open();
+            DataTable ds = GetCustomersData();
+            grCustomers.DataSource = ds;
+            grCustomers.DataBind();
+
+            con.Close();
         }
 
         protected void OnRowDataBound(object sender, GridViewRowEventArgs e)
@@ -197,7 +212,7 @@ namespace LoginPage
             con.Close();
 
             con.Open();
-            DataTable ds = GetData();
+            DataTable ds = GetCustomersData();
             grCustomers.DataSource = ds;
             grCustomers.DataBind();
 
@@ -233,6 +248,21 @@ namespace LoginPage
             add.Enabled = true;
             submit.Visible = false;
             submit.Enabled = false;
+        }
+
+        protected void projEdit_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            
+            foreach(TextBox txt in projList.Items)
+            {
+                txt.ReadOnly = false;
+                txt.Enabled = true;
+            }
+
+            //This seems to fuck everything up when its in the aspx page
+            //No god damn idea why
+            //<asp:Button ID="projEdit" runat="server" Text="Edit" OnClick="projEdit_Click" style="background:#213364; color:white; font-size:15px; font-family: Helvetica, Arial, sans-serif;  font-weight:300;" />
         }
     }
 }
