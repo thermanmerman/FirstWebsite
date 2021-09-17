@@ -253,16 +253,67 @@ namespace LoginPage
         protected void projEdit_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            
-            foreach(TextBox txt in projList.Items)
+
+            foreach (DataListItem item in projList.Items)
             {
-                txt.ReadOnly = false;
-                txt.Enabled = true;
+                TextBox name = item.FindControl("proj_name") as TextBox;
+                name.ReadOnly = false;
+                name.Enabled = true;
+
+                TextBox desc = item.FindControl("proj_desc") as TextBox;
+                desc.ReadOnly = false;
+                desc.Enabled = true;
+
+                TextBox notes = item.FindControl("notes") as TextBox;
+                notes.ReadOnly = false;
+                notes.Enabled = true;
+
+                Button projSave = item.FindControl("projSave") as Button;
+                projSave.Enabled = true;
+                projSave.Visible = true;
             }
 
-            //This seems to fuck everything up when its in the aspx page
-            //No god damn idea why
-            //<asp:Button ID="projEdit" runat="server" Text="Edit" OnClick="projEdit_Click" style="background:#213364; color:white; font-size:15px; font-family: Helvetica, Arial, sans-serif;  font-weight:300;" />
+            btn.Visible = false;
+            btn.Enabled = false;
+
+        }
+
+        protected void projSave_Click(object sender, EventArgs e)
+        {
+            foreach (DataListItem item in projList.Items)
+            {
+                TextBox name = item.FindControl("proj_name") as TextBox;
+                TextBox desc = item.FindControl("proj_desc") as TextBox;
+                TextBox notes = item.FindControl("notes") as TextBox;
+
+                Button projEdit = item.FindControl("projEdit") as Button;
+                projEdit.Enabled = true;
+                projEdit.Visible = true;
+
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE projects SET name = '" + name.Text + "', description = '" + desc.Text + "' WHERE id=" + Request.QueryString["id"].ToString(), con);
+                MySqlCommand cmd2 = new MySqlCommand("UPDATE proj_notes SET note = '" + notes.Text + "' WHERE project_id=" + Request.QueryString["id"].ToString(), con);
+
+                cmd.ExecuteNonQuery();
+                cmd2.ExecuteNonQuery();
+                con.Close();
+
+                name.ReadOnly = true;
+                name.Enabled = false;
+
+                desc.ReadOnly = true;
+                desc.Enabled = false;
+
+                notes.ReadOnly = true;
+                notes.Enabled = false;
+            }
+
+            Button btn = (Button)sender;
+            btn.Visible = false;
+            btn.Enabled = false;
+
+
+            
         }
     }
 }
