@@ -65,47 +65,45 @@ namespace LoginPage
         protected void edit_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            string id = btn.CommandArgument;
             foreach (DataListItem item in dlcustomers.Items)
             {
-                TextBox tb = (TextBox)item.FindControl(btn.CommandArgument);
-                if (tb.ID == id)
+                foreach (TextBox txt in item.Controls.OfType<TextBox>())
                 {
-                    tb.ReadOnly = false;
-                    tb.Enabled = true;
+                    txt.ReadOnly = false;
+                    txt.Enabled = true;
                     btn.Enabled = false;
                     btn.Visible = false;
 
-                    Button save = (Button)item.FindControl(btn.CommandArgument + "_save");
+                    Button save = item.FindControl("save") as Button;
                     save.Visible = true;
                     save.Enabled = true;
                 }
+                
+                    
+                
             }
         }
 
         protected void save_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            string id = btn.CommandArgument;
-            foreach(DataListItem item in dlcustomers.Items)
+            foreach (DataListItem item in dlcustomers.Items) //Looping through the datalist full of customer data
             {
-                TextBox tb = (TextBox)item.FindControl(btn.CommandArgument);
-                if (tb.ID == id)
+                foreach (TextBox txt in item.Controls.OfType<TextBox>()) //Finds every textbox in that datalist
                 {
+                    string value = txt.Text;
+                    MySqlCommand cmd = new MySqlCommand("UPDATE customers SET " + txt.ID.ToString() + "=" + "'" + value  + "' WHERE contact_id=" + Request.QueryString["contact_id"].ToString(), con);
 
-                    string value = tb.Text;
-                    MySqlCommand cmd = new MySqlCommand("UPDATE customers SET " + btn.CommandArgument + " = " + "'" + value + "'" + " WHERE project_id=" + Request.QueryString["id"].ToString(), con);
-                    
                     con.Open();
                     cmd.ExecuteNonQuery();
                     con.Close();
 
-                    
-
-                    btn.Visible = false;
+                    txt.ReadOnly = true;
+                    txt.Enabled = false;
                     btn.Enabled = false;
+                    btn.Visible = false;
 
-                    Button edit = (Button)item.FindControl(btn.CommandArgument + "_edit");
+                    Button edit = item.FindControl("edit") as Button;
                     edit.Visible = true;
                     edit.Enabled = true;
                 }

@@ -12,7 +12,6 @@ namespace LoginPage
     public partial class users : System.Web.UI.Page
     {
         MySqlConnection con = new MySqlConnection("datasource=localhost;port=3306;username=maxmckelvey;password=G@torade123;Connection Timeout=3000;database=acuity");
-
         private DataTable GetCustomersData()
         {
             using (con)
@@ -57,6 +56,7 @@ namespace LoginPage
         {
             if (!Page.IsPostBack)
             {
+
                 con.Open();
                 DataTable ds = GetCustomersData();
                 grCustomers.DataSource = ds;
@@ -315,5 +315,11 @@ namespace LoginPage
 
             
         }
+
+        protected void cust_click(object sender, GridViewEditEventArgs e)
+        {
+            string contact_id = grCustomers.Rows[e.NewEditIndex].Cells[2].Text;
+        }
+
     }
 }

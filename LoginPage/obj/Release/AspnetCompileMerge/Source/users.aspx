@@ -22,7 +22,7 @@
                         <AlternatingRowStyle BackColor="White"></AlternatingRowStyle>
                         <Columns>
                             <asp:TemplateField HeaderText="View">
-                                <ItemTemplate><a href='projdetails.aspx?id=<%#Eval("contact_id")%>'>View</a></ItemTemplate>
+                                <ItemTemplate><a href='projdetails.aspx?contact_id=<%#Eval("contact_id")%>'>View</a></ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Remove">
                                 <ItemTemplate>
