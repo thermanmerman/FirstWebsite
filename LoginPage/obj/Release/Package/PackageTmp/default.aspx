@@ -7,7 +7,7 @@
     <strong>Login Form</strong> 
     <form id="form1" runat="server">  
           
-            <table style="width:100%;">  
+            <table>  
   
                 <tr>  
                     <td>  
@@ -33,17 +33,7 @@ ControlToValidate="TextBox2" ErrorMessage="Please Enter Your password"
 ForeColor="Red"></asp:RequiredFieldValidator>  
                     </td>  
                 </tr>  
-                <tr>  
-                    <td>  
- </td>  
-                    <td>  
- </td>  
-                    <td>  
- </td>  
-                </tr>  
-                <tr>  
-                    <td>  
- </td>  
+<tr>
                     <td>  
                         <asp:Button ID="Button1" runat="server" Text="Log In" onclick="Button1_Click" style="background:#213364; color:white; font-size:15px; font-family: Helvetica, Arial, sans-serif;  font-weight:300;"/>  
                     </td>  

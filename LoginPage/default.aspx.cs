@@ -27,13 +27,11 @@ namespace Default
             con.Open();
             int i = cmd.ExecuteNonQuery();
             con.Close();
-
+           
             if (dt.Rows.Count > 0)
             {
-                Server.Transfer("Redirectpage.aspx");
-                //Response.Redirect("~/Redirectpage.aspx", true);
-                HttpContext.Current.ApplicationInstance.CompleteRequest();
-                
+                Response.Redirect("http://72.167.225.116/plesk-site-preview/acuity.jetsdata.com/Redirectpage.aspx");
+
             }
             else
             {
@@ -41,6 +39,10 @@ namespace Default
                 Label1.ForeColor = System.Drawing.Color.Red;
 
             }
+            
+
+            
+            
 
 
         }
