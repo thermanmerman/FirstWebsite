@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using MySql.Data.MySqlClient;
-using System.Data;
-using System.Text;
 
 namespace LoginPage
 {
@@ -59,7 +56,7 @@ namespace LoginPage
                 dlcustomers.DataBind();
                 con.Close();
             }
-            
+
         }
 
         protected void edit_Click(object sender, EventArgs e)
@@ -74,13 +71,13 @@ namespace LoginPage
                     btn.Enabled = false;
                     btn.Visible = false;
 
-                    Button save = item.FindControl("save") as Button;
-                    save.Visible = true;
-                    save.Enabled = true;
+
                 }
-                
-                    
-                
+
+                Button save = item.FindControl("save") as Button;
+                save.Visible = true;
+                save.Enabled = true;
+
             }
         }
 
@@ -92,7 +89,7 @@ namespace LoginPage
                 foreach (TextBox txt in item.Controls.OfType<TextBox>()) //Finds every textbox in that datalist
                 {
                     string value = txt.Text;
-                    MySqlCommand cmd = new MySqlCommand("UPDATE customers SET " + txt.ID.ToString() + "=" + "'" + value  + "' WHERE contact_id=" + Request.QueryString["contact_id"].ToString(), con);
+                    MySqlCommand cmd = new MySqlCommand("UPDATE customers SET " + txt.ID.ToString() + "=" + "'" + value + "' WHERE contact_id=" + Request.QueryString["contact_id"].ToString(), con);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -103,10 +100,11 @@ namespace LoginPage
                     btn.Enabled = false;
                     btn.Visible = false;
 
-                    Button edit = item.FindControl("edit") as Button;
-                    edit.Visible = true;
-                    edit.Enabled = true;
+
                 }
+                Button edit = item.FindControl("edit") as Button;
+                edit.Visible = true;
+                edit.Enabled = true;
             }
             ShowData();
         }

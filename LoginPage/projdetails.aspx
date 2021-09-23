@@ -2,24 +2,15 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-    
-</head>
+<html>
 <body>
     <form id="form1" runat="server">
-        <table style="width:100%;"> 
-                    
-                    
-                       
+        <table> 
+                    <tr>
+                        <td>
                             <asp:DataList ID="dlcustomers" runat="server" CellSpacing = "3" RepeatLayout="Table" >
                                 <ItemTemplate>
-                                        <tr>
-                                            <th colspan="2">
-                                            </th>
-                                        </tr>
-
+                   
                                         <tr>
                                             <td>
                                                 First name:
@@ -215,16 +206,16 @@
                                             </td>
                                             <td>
                                                 <asp:TextBox ID="address" runat="server" Text='<%# Eval("address") %>' ReadOnly="true" Enabled="false"   />
-                                                <asp:Button ID="edit" runat="server" Text="Edit"  Height="30" Width="40"   AlternateText=" " OnClick="edit_Click" CommandName="manageWiki"   CausesValidation="True" />
-                                                <asp:Button ID="save" runat="server" Text="Save" Height="30" Width="40" OnClick="save_Click" CommandName="manageWiki" CausesValidation="true" Visible="false" Enabled="false" />
+                                                <asp:Button ID="edit" runat="server" Text="Edit" Height="30" Width="40" AlternateText = " " OnClick="edit_Click" CausesValidation="True" />
+                                                <asp:Button ID="save" runat="server" Text="Save" Height="30" Width="40" AlternateText = " " OnClick="save_Click" CausesValidation="true" Visible="false" Enabled="false" />
                             
                                             </td>
                                         </tr>
+                                       
                                 </ItemTemplate>
                             </asp:DataList>
-                            
-
-      
+                            </td>
+                        </tr>
             </table>
         
     </form>

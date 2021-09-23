@@ -84,10 +84,10 @@ namespace LoginPage
 
         protected void grCustomers_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-            string row = grCustomers.Rows[e.RowIndex].Cells[4].Text;
+            string row = grCustomers.Rows[e.RowIndex].Cells[2].Text;
 
             con.Open();
-            MySqlCommand delquery = new MySqlCommand("DELETE FROM customers WHERE last_name='" + row + "'", con);
+            MySqlCommand delquery = new MySqlCommand("DELETE FROM customers WHERE contact_id='" + row + "'", con);
             delquery.ExecuteNonQuery();
             con.Close();
 
@@ -96,7 +96,13 @@ namespace LoginPage
             grCustomers.DataSource = ds;
             grCustomers.DataBind();
 
+            DataTable dt = GetNotes();
+            projList.DataSource = dt;
+            projList.DataBind();
+
             con.Close();
+
+            
         }
 
         protected void OnRowDataBound(object sender, GridViewRowEventArgs e)
@@ -138,6 +144,11 @@ namespace LoginPage
             add.Enabled = false;
             submit.Visible = true;
             submit.Enabled = true;
+
+            searchAdd.Visible = true;
+            searchAdd.Enabled = true;
+            searchAddSubmit.Visible = true;
+            searchAddSubmit.Enabled = true;
 
         }
 
@@ -248,6 +259,11 @@ namespace LoginPage
             add.Enabled = true;
             submit.Visible = false;
             submit.Enabled = false;
+
+            searchAdd.Visible = false;
+            searchAdd.Enabled = false;
+            searchAddSubmit.Visible = false;
+            searchAddSubmit.Enabled = false;
         }
 
         protected void projEdit_Click(object sender, EventArgs e)
@@ -316,10 +332,45 @@ namespace LoginPage
             
         }
 
-        protected void cust_click(object sender, GridViewEditEventArgs e)
+        protected void searchAddSubmit_Click(object sender, EventArgs e)
         {
-            string contact_id = grCustomers.Rows[e.NewEditIndex].Cells[2].Text;
+            con.Open();
+            MySqlCommand cmd = new MySqlCommand();
+
+            string sql = "SELECT * FROM customers";
+            string txt = sqlClean(searchAddSubmit.Text);
+            if (!string.IsNullOrEmpty(txt.Trim()))
+            {
+                sql += " WHERE(LOWER(last_name) LIKE LOWER('%" + txt.Trim() + "%'))";
+                //cmd.Parameters.AddWithValue("@name", searchbar.Text.Trim());
+            }
+
+            cmd.CommandText = sql;
+            cmd.Connection = con;
+            MySqlDataAdapter sda = new MySqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            searchGrid.DataSource = dt;
+            searchGrid.DataBind();
+            con.Close();
+            searchGrid.Visible = true;
+            searchGrid.Enabled = true;
+
         }
 
+        protected string sqlClean(string input)
+        {
+            input = input.Replace("'", "''");
+            input = input.Replace('"', ' ');
+            input = input.Replace("&", " ");
+            input = input.Replace("(", " ");
+            input = input.Replace(")", " ");
+            input = input.Replace("@", " ");
+            input = input.Replace("#", " ");
+            input = input.Replace("$", " ");
+            input = input.Replace("%", " ");
+            return input;
+        }
     }
 }

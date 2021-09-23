@@ -30,7 +30,7 @@ namespace Default
            
             if (dt.Rows.Count > 0)
             {
-                Response.Redirect("http://72.167.225.116/plesk-site-preview/acuity.jetsdata.com/Redirectpage.aspx");
+                Response.Redirect("http://jetsdata.com/Redirectpage.aspx");
 
             }
             else
