@@ -117,6 +117,14 @@ namespace LoginPage
                         button.Attributes["onclick"] = "if(!confirm('Do you want to delete " + item + "?')){ return false; };";
                     }
                 }
+
+                foreach(Button button in e.Row.Cells[0].Controls.OfType<Button>())
+                {
+                    if (button.CommandName == "add")
+                    {
+                        SearchAdd_Click(sender, e);
+                    }
+                }
             }
         }
 
@@ -150,6 +158,112 @@ namespace LoginPage
             searchAddSubmit.Visible = true;
             searchAddSubmit.Enabled = true;
 
+        }
+
+        protected void SearchAdd_Click(object sender, GridViewRowEventArgs e)
+        {
+            int newID = 0;
+            if (searchGrid.Rows.Count > 0)
+            {
+                string IdQuery = "SELECT contact_id FROM customers ORDER BY contact_id DESC LIMIT 1;";
+                //MySqlDataAdapter Idquery = new MySqlDataAdapter(IdQuery, con);
+                con.Open();
+                MySqlCommand Idquery = new MySqlCommand(IdQuery, con);
+                MySqlDataReader dr = Idquery.ExecuteReader();
+                dr.Read();
+                //Idquery.SelectCommand.ExecuteNonQuery();
+                string stringID = dr.GetValue(0).ToString();
+                con.Close();
+                int previousID = 0;
+                if (stringID != string.Empty)
+                {
+                    try
+                    {
+                        previousID = Int32.Parse(stringID);
+                    }
+                    catch
+                    {
+                        previousID = 0;
+                    }
+
+                    previousID = previousID += 1;
+
+                }
+
+                newID = previousID;
+            }
+
+            con.Open();
+
+            string query = "INSERT INTO customers(contact_id, first_name, last_name, account_name, email, title, department, phone, address, project_id) VALUES(@contact_id, @first_name, @last_name, @account_name, @email, @title, @department, @phone, @address, @project_id);";
+            MySqlCommand da = new MySqlCommand(query, con);
+
+            da.Parameters.AddWithValue("@first_name", e.Row.Cells[2].Text);
+
+            da.Parameters.AddWithValue("@last_name", e.Row.Cells[3].Text);
+
+            da.Parameters.AddWithValue("@account_name", e.Row.Cells[4].Text);
+
+            da.Parameters.AddWithValue("@email", e.Row.Cells[5].Text);
+
+            da.Parameters.AddWithValue("@title", e.Row.Cells[6].Text);
+
+            da.Parameters.AddWithValue("@department", e.Row.Cells[7].Text);
+
+            da.Parameters.AddWithValue("@phone", e.Row.Cells[8].Text);
+
+            da.Parameters.AddWithValue("@address", e.Row.Cells[9].Text);
+
+            da.Parameters.AddWithValue("@project_id", Request.QueryString["id"].ToString());
+
+            da.Parameters.AddWithValue("@contact_id", newID);
+
+            da.ExecuteNonQuery();
+
+            con.Close();
+
+            con.Open();
+            DataTable ds = GetCustomersData();
+            grCustomers.DataSource = ds;
+            grCustomers.DataBind();
+
+            con.Close();
+
+
+            first_name.Visible = false;
+            first_name.Enabled = false;
+            first_name.Text = "First name";
+            last_name.Visible = false;
+            last_name.Enabled = false;
+            last_name.Text = "Last name";
+            account_name.Visible = false;
+            account_name.Enabled = false;
+            account_name.Text = "Account name";
+            email.Visible = false;
+            email.Enabled = false;
+            email.Text = "Email";
+            title.Visible = false;
+            title.Enabled = false;
+            title.Text = "Title";
+            department.Visible = false;
+            department.Enabled = false;
+            department.Text = "Department";
+            phone.Visible = false;
+            phone.Enabled = false;
+            phone.Text = "Phone";
+            address.Visible = false;
+            address.Enabled = false;
+            address.Text = "Address";
+
+            add.Visible = true;
+            add.Enabled = true;
+            submit.Visible = false;
+            submit.Enabled = false;
+
+            searchAdd.Visible = false;
+            searchAdd.Enabled = false;
+            searchAddSubmit.Visible = false;
+            searchAddSubmit.Enabled = false;
         }
 
         protected void submit_Click(object sender, EventArgs e)
@@ -217,6 +331,89 @@ namespace LoginPage
             da.Parameters.AddWithValue("@project_id", Request.QueryString["id"].ToString());
 
             da.Parameters.AddWithValue("@contact_id", newID);
+
+            string relqu = "SELECT user_id FROM project_relation";
+            con.Open();
+            MySqlCommand relcmd = new MySqlCommand(relqu, con);
+            MySqlDataReader reldr = relcmd.ExecuteReader();
+            reldr.Read();
+            con.Close();
+            bool isID = false;
+            int contact_id = 0;
+            foreach (int num in reldr)
+            {
+                if (num == newID)
+                {
+                    isID = true;
+                    contact_id = num;
+                }
+            }
+
+
+            int relationID = 0;
+            if (grCustomers.Rows.Count > 0)
+            {
+                string IdQuery = "SELECT id FROM project_relation ORDER BY id DESC LIMIT 1;";
+                //MySqlDataAdapter Idquery = new MySqlDataAdapter(IdQuery, con);
+                con.Open();
+                MySqlCommand Idquery = new MySqlCommand(IdQuery, con);
+                MySqlDataReader dr = Idquery.ExecuteReader();
+                dr.Read();
+                //Idquery.SelectCommand.ExecuteNonQuery();
+                string stringID = dr.GetValue(0).ToString();
+                con.Close();
+                int previousID = 0;
+                if (stringID != string.Empty)
+                {
+                    try
+                    {
+                        previousID = Int32.Parse(stringID);
+                    }
+                    catch
+                    {
+                        previousID = 0;
+                    }
+
+                    previousID = previousID += 1;
+
+                }
+
+                relationID = previousID;
+            }
+            if (isID)
+            {
+                string idquery = "SELECT project_id FROM project_relation WHERE user_id = " + contact_id;
+
+                con.Open();
+                MySqlCommand quid = new MySqlCommand(idquery, con);
+                MySqlDataReader qudr = quid.ExecuteReader();
+                reldr.Read();
+                con.Close();
+
+                //FIX THIS BEFORE DOING ANYTHING
+                string newProjID = reldr.ToString() + Request.QueryString["id"].ToString();
+
+                string relations = "UPDATE project_relation SET project_id = '" + newProjID;
+                con.Open();
+                MySqlCommand update = new MySqlCommand(relations, con);
+                update.ExecuteNonQuery();
+                con.Close();
+            }
+            else if (!isID)
+            {
+                string relations = "INSERT into project_relation(id, project_id, user_id) VALUES(@id, @project_id, @user_id)";
+                MySqlCommand sc = new MySqlCommand(relations, con);
+                con.Open();
+                sc.Parameters.AddWithValue("@id", relationID);
+
+                sc.Parameters.AddWithValue("@project_id", Request.QueryString["id"].ToString());
+
+                sc.Parameters.AddWithValue("@user_id", newID);
+
+                sc.ExecuteNonQuery();
+                con.Close();
+            }
+            
 
             da.ExecuteNonQuery();
 
@@ -337,8 +534,8 @@ namespace LoginPage
             con.Open();
             MySqlCommand cmd = new MySqlCommand();
 
-            string sql = "SELECT * FROM customers";
-            string txt = sqlClean(searchAddSubmit.Text);
+            string sql = "SELECT customers.contact_id, customers.first_name, customers.last_name, customers.account_name, customers.email, customers.title, customers.department, customers.phone, customers.address, customers.project_id FROM customers INNER JOIN project_relation ON customers.project_id=project_relation.project_id";
+            string txt = sqlClean(searchAdd.Text);
             if (!string.IsNullOrEmpty(txt.Trim()))
             {
                 sql += " WHERE(LOWER(last_name) LIKE LOWER('%" + txt.Trim() + "%'))";

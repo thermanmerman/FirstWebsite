@@ -80,33 +80,23 @@
                     <br />
                     <asp:TextBox ID="searchAdd" runat="server" Visible="false" Enabled="false" Text="Search existing"></asp:TextBox>
                     <asp:Button ID="searchAddSubmit" runat="server" OnClick="searchAddSubmit_Click" Visible="false" Enabled="false" Text="Search" Style="background: #213364; color: white; font-size: 15px; font-family: Helvetica, Arial, sans-serif; font-weight: 300;" />
-                     
                     <br />
-                    <asp:GridView ID="searchGrid" runat="server" Visible="false" Enabled="false" AllowSorting="true" OnRowDataBound="OnRowDataBound" >
+                    <asp:GridView ID="searchGrid" runat="server" Visible="false" Enabled="false" AllowSorting="true" OnRowDataBound="OnRowDataBound">
                         <Columns>
                             <asp:TemplateField HeaderText="Add">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="gridAdd" runat="server" Text="Add" CommandName="add"></asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
-                            <asp:BoundField DataField="contact_id" HeaderText="Contact ID">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="first_name" HeaderText="First Name">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="last_name" HeaderText="Last Name">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="account_name" HeaderText="Account Name">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="email" HeaderText="Email">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="title" HeaderText="Title">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="department" HeaderText="Department">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="phone" HeaderText="Phone">
-                            </asp:BoundField>
-                            <asp:BoundField DataField="address" HeaderText="Address">
-                            </asp:BoundField>
+                            <asp:BoundField DataField="contact_id" HeaderText="Contact ID"></asp:BoundField>
+                            <asp:BoundField DataField="first_name" HeaderText="First Name"></asp:BoundField>
+                            <asp:BoundField DataField="last_name" HeaderText="Last Name"></asp:BoundField>
+                            <asp:BoundField DataField="account_name" HeaderText="Account Name"></asp:BoundField>
+                            <asp:BoundField DataField="email" HeaderText="Email"></asp:BoundField>
+                            <asp:BoundField DataField="title" HeaderText="Title"></asp:BoundField>
+                            <asp:BoundField DataField="department" HeaderText="Department"></asp:BoundField>
+                            <asp:BoundField DataField="phone" HeaderText="Phone"></asp:BoundField>
+                            <asp:BoundField DataField="address" HeaderText="Address"></asp:BoundField>
                         </Columns>
                     </asp:GridView>
 
