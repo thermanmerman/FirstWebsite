@@ -80,6 +80,7 @@
                     <br />
                     <asp:TextBox ID="searchAdd" runat="server" Visible="false" Enabled="false" Text="Search existing"></asp:TextBox>
                     <asp:Button ID="searchAddSubmit" runat="server" OnClick="searchAddSubmit_Click" Visible="false" Enabled="false" Text="Search" Style="background: #213364; color: white; font-size: 15px; font-family: Helvetica, Arial, sans-serif; font-weight: 300;" />
+                    <asp:Label ID="label1" Text="Client is already in the project" runat="server" Visible="false" Enabled="false"></asp:Label>
                     <br />
                     <asp:GridView ID="searchGrid" runat="server" Visible="false" Enabled="false" AllowSorting="true" OnRowDataBound="OnRowDataBound">
                         <Columns>
