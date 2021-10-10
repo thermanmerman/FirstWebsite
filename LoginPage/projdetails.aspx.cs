@@ -108,5 +108,26 @@ namespace LoginPage
             }
             ShowData();
         }
+
+        protected void back_Click(object sender, EventArgs e)
+        {
+            string contID = "SELECT project_id FROM customers WHERE contact_id=" + Request.QueryString["contact_id"].ToString();
+            con.Open();
+            MySqlCommand cm = new MySqlCommand(contID, con);
+            MySqlDataReader dr = cm.ExecuteReader();
+            dr.Read();
+            string projID = dr.GetValue(0).ToString();
+            con.Close();
+
+            string getname = "SELECT name FROM projects WHERE id=" + projID;
+            con.Open();
+            MySqlCommand cmd = new MySqlCommand(getname, con);
+            MySqlDataReader drdr = cmd.ExecuteReader();
+            drdr.Read();
+            string name = drdr.GetValue(0).ToString();
+            con.Close();
+
+            Response.Redirect("http://jetsdata.com/users.aspx?id=" + projID + "&name=" + name);
+        }
     }
 }

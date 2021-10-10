@@ -118,8 +118,14 @@ namespace Default
 
                 con.Close();
 
-                
-                
+                string notequer = "INSERT INTO proj_notes(project_id, note) VALUES(@project_id, @note)";
+                con.Open();
+                MySqlCommand cm = new MySqlCommand(notequer, con);
+                cm.Parameters.AddWithValue("@project_id", newID);
+                cm.Parameters.AddWithValue("@note", string.Empty);
+                cm.ExecuteNonQuery();
+                con.Close();
+
                 Label1.Text += "Data saved successfully";
 
                 ShowData();
