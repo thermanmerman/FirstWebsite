@@ -20716,7 +20716,7 @@ header + .embedded-dialog.in-full-loading.panel {
 
             <tr>
                 <td>
-                    <asp:GridView ID="grCustomers" PageSize="1" OnRowDataBound="OnRowDataBound" OnPageIndexChanging="grCustomers_PageIndexChanging" AllowPaging="True" AutoGenerateColumns="False" DataKeyNames="project_id" PagerSettings-Mode="Numeric" PagerSettings-Position="TopAndBottom" PagerStyle-CssClass="pagination-bottom" AllowSorting="True" Font-Size="16px" runat="Server" EmptyDataText="There are no current clients in this project" OnRowDeleting="grCustomers_RowDeleting" CellPadding="4">
+                    <asp:GridView ID="grCustomers" PageSize="25" OnRowDataBound="OnRowDataBound" OnPageIndexChanging="grCustomers_PageIndexChanging" AllowPaging="True" AutoGenerateColumns="False" DataKeyNames="project_id" PagerSettings-Mode="Numeric" PagerSettings-Position="TopAndBottom" PagerStyle-CssClass="pagination-bottom" AllowSorting="True" Font-Size="16px" runat="Server" EmptyDataText="There are no current clients in this project" OnRowDeleting="grCustomers_RowDeleting" CellPadding="4">
                         <Columns>
                             <asp:TemplateField HeaderText="View" >
                                 <ItemTemplate><a href='projdetails.aspx?contact_id=<%#Eval("contact_id")%>'>View</a></ItemTemplate>
@@ -20790,6 +20790,8 @@ header + .embedded-dialog.in-full-loading.panel {
                             <asp:BoundField DataField="project_id" HeaderText="Project ID"></asp:BoundField>
                         </Columns>
                     </asp:GridView>
+
+                    <asp:Label ID="notworking" runat="server" Text="This isn't working and I'm not sure why. See searchAddSubmitClick in users.aspx.cs for more details" Visible="false"></asp:Label>
 
                 </td>
                 

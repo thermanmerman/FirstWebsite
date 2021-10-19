@@ -33,6 +33,77 @@ namespace Default
             }
         }
 
+        private DataTable GetCustomersData()
+        {
+            //string constr = "datasource=localhost;port=3306;username=maxmckelvey;password=G@torade123;Connection Timeout=3000;database=acuity";
+            using (con)
+            {
+                using (MySqlCommand cmd = new MySqlCommand("select * from customers", con))
+                {
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataTable dt = new DataTable("table"))
+                        {
+                            sda.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void dropsetup()
+        {
+            for (int i = 0; i < projects.Rows.Count; i++)
+            {
+                Button name = new Button();
+                name.Text = projects.Rows[i].Cells[3].Text;
+                name.ID = "item" + i;
+                name.Click += proj_click;
+                name.CommandArgument = i.ToString();
+                dropdwn.Controls.Add(name);
+            }
+
+            GridView grid = new GridView();
+            con.Open();
+            DataTable ds = GetCustomersData();
+            grid.DataSource = ds;
+            grid.DataBind();
+            con.Close();
+            for (int i = 0; i < grid.Rows.Count; i++)
+            {
+                Button name = new Button();
+                name.Text = grid.Rows[i].Cells[3].Text + " " + grid.Rows[i].Cells[4].Text;
+                name.ID = "cust" + i;
+                name.Click += cust_click;
+                name.CommandArgument = i.ToString();
+                dropdown.Controls.Add(name);
+            }
+        }
+
+        protected void proj_click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int i = Int32.Parse(btn.CommandArgument);
+            Response.Redirect("http://jetsdata.com/users.aspx?id=" + projects.Rows[i].Cells[2].Text + "&name=" + projects.Rows[i].Cells[3].Text);
+        }
+
+        protected void cust_click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            string[] nameList = btn.Text.Split();
+            MySqlCommand cmd = new MySqlCommand("SELECT contact_id FROM customers WHERE first_name='" + nameList[1] + "' AND last_name='" + nameList[2]);
+            con.Open();
+            MySqlDataReader dr = cmd.ExecuteReader();
+            dr.Read();
+            //Idquery.SelectCommand.ExecuteNonQuery();
+            string id = dr.GetValue(0).ToString();
+            con.Close();
+            Response.Redirect("http://jetsdata.com/projdetails.aspx?contact_id=" + id);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -41,22 +112,17 @@ namespace Default
                 DataTable ds = GetData();
                 projects.DataSource = ds;
                 projects.DataBind();
-                con.Close();
+                con.Close();  
             }
 
+            dropsetup();
             //ENCRYPTION (WILL USE LATER)
             //string key = "b14ca5898a4e4133bbce2ea2315a1916";
             //string enc = AesOperation.EncryptString(key, Session["password"].ToString());
             
         }
 
-        protected void proj_click(object sender, GridViewEditEventArgs e)
-        {
-            string id = projects.Rows[e.NewEditIndex].Cells[1].Text;
-            string name = projects.Rows[e.NewEditIndex].Cells[3].Text;
-
-            //Response.Redirect("http://72.167.225.116/plesk-site-preview/acuity.jetsdata.com/projdetails.aspx?id=" + id + "&name=" + name);
-        }
+        
 
         protected void subButt(object sender, EventArgs e)
         {
@@ -269,5 +335,6 @@ namespace Default
             projects.PageIndex = e.NewPageIndex;
             ShowData();
         }
+
     }
 }

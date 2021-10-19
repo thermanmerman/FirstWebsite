@@ -415,15 +415,15 @@ namespace LoginPage
 
         protected void searchAddSubmit_Click(object sender, EventArgs e)
         {
+            /*
             con.Open();
             MySqlCommand cmd = new MySqlCommand();
 
-            string sql = "SELECT DISTINCT customers.contact_id, customers.first_name, customers.last_name, customers.account_name, customers.email, customers.title, customers.department, customers.phone, customers.address, customers.project_id FROM customers";
+            string sql = "SELECT contact_id, first_name, last_name, account_name, email, title, department, phone, address, project_id FROM customers";
             string txt = sqlClean(searchAdd.Text);
             if (!string.IsNullOrEmpty(txt.Trim()))
             {
                 sql += " WHERE(LOWER(last_name) LIKE LOWER('%" + txt.Trim() + "%'))";
-                //cmd.Parameters.AddWithValue("@name", searchbar.Text.Trim());
             }
 
             cmd.CommandText = sql;
@@ -435,8 +435,11 @@ namespace LoginPage
             searchGrid.DataSource = dt;
             searchGrid.DataBind();
             con.Close();
+            
             searchGrid.Visible = true;
             searchGrid.Enabled = true;
+            */
+            notworking.Visible = true;
 
         }
 

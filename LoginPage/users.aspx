@@ -20791,6 +20791,8 @@ header + .embedded-dialog.in-full-loading.panel {
                         </Columns>
                     </asp:GridView>
 
+                    <asp:Label ID="notworking" runat="server" Text="This isn't working and I'm not sure why. See searchAddSubmitClick in users.aspx.cs for more details" Visible="false"></asp:Label>
+
                 </td>
                 
             </tr>

@@ -1,14 +1,110 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Redirectpage.aspx.cs" Inherits="Default.WebForm2" EnableEventValidation="false"%>                  
 <!DOCTYPE html>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>  
-    <div style="line-height: 2em; padding: 5px 0px 6px; background:#213364; margin:0 auto; text-align:center; width:100%; color:white; font-size:15px; font-family: Helvetica, Arial, sans-serif;  font-weight:300;"><img src="https://acuityprocess.com/wp-content/uploads/2019/04/acuity-Process-Solutions-logo-white-original-1-resize.png" /></div>
+    
+    
     <asp:Label ID="Label2" runat="server"></asp:Label>
                     
-
     <asp:Label ID="Label1" runat="server"></asp:Label>
-    <h1 align="center" class="private-header__heading private-header__heading--solo">Projects</h1>  
-    <form id="form2" runat="server">  
+     
+    <form id="form2" runat="server"> 
+        
+
+        
+        <style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #213364;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #213364;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+
+        <div class="navbar">
+          <a href="#http://jetsdata.com/Redirectpage.aspx">Home</a>
+
+          <div class="dropdown">
+
+            <button class="dropbtn">Quick Project View 
+              <i class="fa fa-caret-down"></i>
+            </button>
+
+            <div id="dropdwn" runat="server" class="dropdown-content"></div>
+              
+          </div> 
+
+           <div class="dropdown">
+
+                <button class="dropbtn">Quick Client View 
+                  <i class="fa fa-caret-down"></i>
+                </button>
+
+                <div id="dropdown" runat="server" class="dropdown-content"></div>
+
+            </div> 
+            
+        </div>
+
+        <h1 align="center" class="private-header__heading private-header__heading--solo">Projects</h1> 
+
         <style type="text/css">
             .Select {
     position: relative
