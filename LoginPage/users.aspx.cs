@@ -22,7 +22,7 @@ namespace LoginPage
                     {
                         cmd.Connection = con;
                         sda.SelectCommand = cmd;
-                        using (DataTable dt = new DataTable("table"))
+                        using (DataTable dt = new DataTable())
                         {
                             sda.Fill(dt);
                             return dt;
@@ -52,6 +52,60 @@ namespace LoginPage
             }
         }
 
+        private DataTable GetProjectData()
+        {
+            //string constr = "datasource=localhost;port=3306;username=maxmckelvey;password=G@torade123;Connection Timeout=3000;database=acuity";
+            using (con)
+            {
+                using (MySqlCommand cmd = new MySqlCommand("select * from projects", con))
+                {
+                    using (MySqlDataAdapter sda = new MySqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataTable dt = new DataTable("table"))
+                        {
+                            sda.Fill(dt);
+                            return dt;
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void dropsetup()
+        {
+            con.Open();
+            DataTable pt = GetProjectData();
+            projects.DataSource = pt;
+            projects.DataBind();
+            con.Close();
+            for (int i = 0; i < projects.Rows.Count; i++)
+            {
+                Button name = new Button();
+                name.Text = projects.Rows[i].Cells[1].Text;
+                name.ID = "item" + i;
+                name.Click += proj_click;
+                name.CommandArgument = i.ToString();
+                dropdwn.Controls.Add(name);
+            }
+
+            con.Open();
+            DataTable ds = GetCustomersData();
+            cust.DataSource = ds;
+            cust.DataBind();
+            con.Close();
+            for (int i = 0; i < cust.Rows.Count; i++)
+            {
+                Button name = new Button();
+                name.Text = cust.Rows[i].Cells[1].Text + " " + cust.Rows[i].Cells[2].Text;
+                name.ID = "cust" + i;
+                name.Click += cust_click;
+                name.CommandArgument = i.ToString();
+                dropdown.Controls.Add(name);
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -68,7 +122,7 @@ namespace LoginPage
                 
                 con.Close();
             }
-
+            dropsetup();
 
         }
 
@@ -361,7 +415,7 @@ namespace LoginPage
                 desc.ReadOnly = false;
                 desc.Enabled = true;
 
-                TextBox notes = item.FindControl("notes") as TextBox;
+                TextBox notes = FindControl("notes") as TextBox;
                 notes.ReadOnly = false;
                 notes.Enabled = true;
 
@@ -460,6 +514,28 @@ namespace LoginPage
         protected void back_Click(object sender, EventArgs e)
         {
             Response.Redirect("http://jetsdata.com/Redirectpage.aspx");
+        }
+
+        protected void proj_click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            int i = Int32.Parse(btn.CommandArgument);
+            Response.Redirect("http://jetsdata.com/users.aspx?id=" + projects.Rows[i].Cells[2].Text + "&name=" + projects.Rows[i].Cells[3].Text);
+        }
+
+        protected void cust_click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+
+            MySqlCommand cmd = new MySqlCommand("SELECT contact_id FROM customers WHERE first_name='" + btn.Text.ToString().Split(' ')[0] + "' AND last_name='" + btn.Text.ToString().Split(' ')[1] + "'", con);
+            con.Open();
+            MySqlDataReader dr = cmd.ExecuteReader();
+            dr.Read();
+            //Idquery.SelectCommand.ExecuteNonQuery();
+            string id = dr.GetValue(0).ToString();
+            con.Close();
+            Response.Redirect("http://jetsdata.com/projdetails.aspx?contact_id=" + id);
+
         }
     }
 }

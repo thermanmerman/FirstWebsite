@@ -1,6 +1,8 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Redirectpage.aspx.cs" Inherits="Default.WebForm2" EnableEventValidation="false"%>                  
 <!DOCTYPE html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="projects_table.css" />
+
 <body>  
     
     
@@ -77,9 +79,8 @@ body {
   display: block;
 }
 </style>
-
         <div class="navbar">
-          <a href="#http://jetsdata.com/Redirectpage.aspx">Home</a>
+          <a href="http://jetsdata.com/Redirectpage.aspx">Home</a>
 
           <div class="dropdown">
 
@@ -90,7 +91,7 @@ body {
             <div id="dropdwn" runat="server" class="dropdown-content"></div>
               
           </div> 
-
+ 
            <div class="dropdown">
 
                 <button class="dropbtn">Quick Client View 
@@ -100,11 +101,18 @@ body {
                 <div id="dropdown" runat="server" class="dropdown-content"></div>
 
             </div> 
+
+            <div class="navSearch-inputWrapper">
+                <asp:TextBox runat="server" ID="clientsearchbox"></asp:TextBox> 
+                <asp:LinkButton class="nav-icon tool-icon" CssClass="primary-link primary-link--icon navSearch-icon checkboxes-ungated" runat="server" ID="clientsearchbutt" OnClick="clientsearchbutton_Click" >
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </asp:LinkButton>
+            </div>
             
         </div>
 
         <h1 align="center" class="private-header__heading private-header__heading--solo">Projects</h1> 
-
+        <asp:GridView runat="server" ID="cust" Visible="false" Enabled="false" ></asp:GridView>
         <style type="text/css">
             .Select {
     position: relative

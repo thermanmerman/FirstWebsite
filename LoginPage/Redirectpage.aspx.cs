@@ -66,16 +66,15 @@ namespace Default
                 dropdwn.Controls.Add(name);
             }
 
-            GridView grid = new GridView();
             con.Open();
             DataTable ds = GetCustomersData();
-            grid.DataSource = ds;
-            grid.DataBind();
+            cust.DataSource = ds;
+            cust.DataBind();
             con.Close();
-            for (int i = 0; i < grid.Rows.Count; i++)
+            for (int i = 0; i < cust.Rows.Count; i++)
             {
                 Button name = new Button();
-                name.Text = grid.Rows[i].Cells[3].Text + " " + grid.Rows[i].Cells[4].Text;
+                name.Text = cust.Rows[i].Cells[3].Text + " " + cust.Rows[i].Cells[4].Text;
                 name.ID = "cust" + i;
                 name.Click += cust_click;
                 name.CommandArgument = i.ToString();
@@ -93,8 +92,8 @@ namespace Default
         protected void cust_click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            string[] nameList = btn.Text.Split();
-            MySqlCommand cmd = new MySqlCommand("SELECT contact_id FROM customers WHERE first_name='" + nameList[1] + "' AND last_name='" + nameList[2]);
+            
+            MySqlCommand cmd = new MySqlCommand("SELECT contact_id FROM customers WHERE first_name='" + btn.Text.ToString().Split(' ')[0] + "' AND last_name='" + btn.Text.ToString().Split(' ')[1] + "'", con);
             con.Open();
             MySqlDataReader dr = cmd.ExecuteReader();
             dr.Read();
@@ -102,6 +101,7 @@ namespace Default
             string id = dr.GetValue(0).ToString();
             con.Close();
             Response.Redirect("http://jetsdata.com/projdetails.aspx?contact_id=" + id);
+            
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -336,5 +336,27 @@ namespace Default
             ShowData();
         }
 
+        protected void clientsearchbutton_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            MySqlCommand cmd = new MySqlCommand();
+
+            string sql = "SELECT contact_id, first_name, last_name, account_name, email, title, department, phone, address, project_id FROM customers";
+            string txt = sqlClean(clientsearchbox.Text);
+            if (!string.IsNullOrEmpty(txt.Trim()))
+            {
+                sql += " WHERE(LOWER(last_name) LIKE LOWER('%" + txt.Trim() + "%'))";
+            }
+
+            cmd.CommandText = sql;
+            cmd.Connection = con;
+            MySqlDataAdapter sda = new MySqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            //projects.DataSource = dt;
+            //projects.DataBind();
+            con.Close();
+        }
     }
 }

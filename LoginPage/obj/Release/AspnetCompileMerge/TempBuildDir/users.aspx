@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="users.aspx.cs" Inherits="LoginPage.users" %>
 
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <body>
@@ -8,6 +9,97 @@
     
     
     <form id="form1" runat="server">
+        
+
+        <style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #213364;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #213364;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+        <div class="navbar">
+          <a href="http://jetsdata.com/Redirectpage.aspx">Home</a>
+
+          <div class="dropdown">
+
+            <button class="dropbtn">Quick Project View 
+              <i class="fa fa-caret-down"></i>
+            </button>
+
+            <div id="dropdwn" runat="server" class="dropdown-content"></div>
+              
+          </div> 
+
+           <div class="dropdown">
+
+                <button class="dropbtn">Quick Client View 
+                  <i class="fa fa-caret-down"></i>
+                </button>
+
+                <div id="dropdown" runat="server" class="dropdown-content"></div>
+
+            </div> 
+            
+        </div>
         <style type="text/css">
             .Select {
     position: relative
@@ -20676,7 +20768,10 @@ header + .embedded-dialog.in-full-loading.panel {
 
         </style>
         <table>
+            <asp:GridView runat="server" ID="cust" Visible="false" Enabled="false" ></asp:GridView>
+            <asp:GridView runat="server" ID="projects" Visible="false" Enabled="false" ></asp:GridView>
             <tr>
+
                 <td>
                     <h1 class="private-header__heading private-header__heading--solo" width="100">Clients</h1>
                 </td>
@@ -20750,6 +20845,8 @@ header + .embedded-dialog.in-full-loading.panel {
                         </Columns>
 
                     </asp:GridView>
+
+                    
                     <br />
 
 
@@ -20794,7 +20891,7 @@ header + .embedded-dialog.in-full-loading.panel {
                     <asp:Label ID="notworking" runat="server" Text="This isn't working and I'm not sure why. See searchAddSubmitClick in users.aspx.cs for more details" Visible="false"></asp:Label>
 
                 </td>
-                
+
             </tr>
 
                 </table>
